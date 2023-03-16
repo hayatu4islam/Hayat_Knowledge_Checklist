@@ -1,4 +1,6 @@
-# Starter Kit
+# CYF Knowledge Checklist
+![banner](https://github.com/hayatu4islam/wm4_3_Final_Project/blob/dev/project-image.PNG)
+## Starter Kit
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/CodeYourFuture/cyf-final-project-starter-kit)
 
