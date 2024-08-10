@@ -4,7 +4,8 @@ import config from "./utils/config";
 import logger from "./utils/logger";
 
 const pool = new Pool({
-	connectionString: config.dbUrl,
+	// connectionString: config.dbUrl,
+	connectionString: process.env.DATABASE_URL,
 	connectionTimeoutMillis: 5000,
 	ssl: config.dbUrl.includes("localhost")
 		? false
