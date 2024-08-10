@@ -1,5 +1,4 @@
 import http from "http";
-
 import app from "./app";
 import { connectDb, disconnectDb } from "./db";
 import config from "./utils/config";
@@ -13,6 +12,60 @@ server.on("listening", () => {
 	logger.info("listening on: %s", bind);
 });
 
-process.on("SIGTERM", () => server.close(() => disconnectDb()));
+server.on("error", (error) => {
+	if (error.syscall !== "listen") {
+		throw error;
+	}
+	const bind =
+		typeof config.port === "string"
+			? `Pipe ${config.port}`
+			: `Port ${config.port}`;
 
-connectDb().then(() => server.listen(config.port));
+	switch (error.code) {
+		case "EACCES":
+			logger.error(`${bind} requires elevated privileges`);
+			process.exit(1);
+			break;
+		case "EADDRINUSE":
+			logger.error(`${bind} is already in use`);
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
+});
+
+process.on("SIGTERM", () => {
+	logger.info("SIGTERM signal received: closing HTTP server");
+	server.close((err) => {
+		if (err) {
+			logger.error("Error closing server:", err);
+			process.exit(1);
+		}
+		disconnectDb().then(() => {
+			logger.info("Disconnected from database");
+			process.exit(0);
+		});
+	});
+});
+
+process.on("SIGINT", () => {
+	logger.info("SIGINT signal received: closing HTTP server");
+	server.close((err) => {
+		if (err) {
+			logger.error("Error closing server:", err);
+			process.exit(1);
+		}
+		disconnectDb().then(() => {
+			logger.info("Disconnected from database");
+			process.exit(0);
+		});
+	});
+});
+
+connectDb()
+	.then(() => server.listen(config.port))
+	.catch((error) => {
+		logger.error("Failed to connect to the database:", error);
+		process.exit(1);
+	});
