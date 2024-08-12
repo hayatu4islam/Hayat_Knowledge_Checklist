@@ -21,6 +21,6 @@ services:
 databases:
   - name: psql
     region: frankfurt
-    databaseName: cyf
+    databaseName: cyf_39kh_0tiq
     plan: free
     ipAllowList: [] # only allow internal connections

@@ -12,8 +12,6 @@ function createDatabaseUrl() {
 		return process.env.DATABASE_URL;
 	}
 	const host = process.env.DB_HOST ?? "localhost";
-	// const host = process.env.DB_HOST ?? "127.0.0.1";
-	// const host = process.env.DB_HOST ?? "";
 	const name = process.env.DB_NAME ?? "cyf_39kh_0tiq";
 	const password = process.env.DB_PASS ?? process.env.DB_PASSWORD ?? "";
 	const port = process.env.DB_PORT ?? "5432";
